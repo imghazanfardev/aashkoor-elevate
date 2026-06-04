@@ -78,6 +78,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#459E5A" },
+      { property: "og:title", content: "AASHKOOR — Engineering Excellence" },
+      { name: "twitter:title", content: "AASHKOOR — Engineering Excellence" },
+      { name: "description", content: "AASHKOOR Enterprise Hub is a premium corporate website and admin dashboard for AASHKOOR's diverse business divisions." },
+      { property: "og:description", content: "AASHKOOR Enterprise Hub is a premium corporate website and admin dashboard for AASHKOOR's diverse business divisions." },
+      { name: "twitter:description", content: "AASHKOOR Enterprise Hub is a premium corporate website and admin dashboard for AASHKOOR's diverse business divisions." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/40905140-59f6-453f-a9d4-95f5dfe40324/id-preview-e6bc38e0--9c103887-1c04-4967-9a5f-29f2610c51f4.lovable.app-1780568068006.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/40905140-59f6-453f-a9d4-95f5dfe40324/id-preview-e6bc38e0--9c103887-1c04-4967-9a5f-29f2610c51f4.lovable.app-1780568068006.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
