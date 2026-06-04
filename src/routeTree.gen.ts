@@ -9,18 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndustrialSupplyRouteImport } from './routes/services.industrial-supply'
 import { Route as ServicesHvacRouteImport } from './routes/services.hvac'
 import { Route as ServicesAgricultureRouteImport } from './routes/services.agriculture'
+import { Route as ProductsCategoriesRouteImport } from './routes/products.categories'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -41,6 +52,11 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -49,6 +65,16 @@ const ContactRoute = ContactRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -77,16 +103,32 @@ const ServicesAgricultureRoute = ServicesAgricultureRouteImport.update({
   path: '/agriculture',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ProductsCategoriesRoute = ProductsCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ProductsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/products': typeof ProductsRoute
+  '/dashboard': typeof DashboardRoute
+  '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
+  '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
@@ -94,12 +136,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/products': typeof ProductsRoute
+  '/dashboard': typeof DashboardRoute
+  '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
+  '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
@@ -108,12 +156,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/products': typeof ProductsRoute
+  '/dashboard': typeof DashboardRoute
+  '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
+  '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
@@ -123,12 +177,18 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
+    | '/auth'
     | '/blog'
     | '/contact'
+    | '/dashboard'
     | '/products'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/wishlist'
+    | '/products/$slug'
+    | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
@@ -136,12 +196,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/admin'
+    | '/auth'
     | '/blog'
     | '/contact'
+    | '/dashboard'
     | '/products'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/wishlist'
+    | '/products/$slug'
+    | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
@@ -149,12 +215,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
+    | '/auth'
     | '/blog'
     | '/contact'
+    | '/dashboard'
     | '/products'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/wishlist'
+    | '/products/$slug'
+    | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
@@ -163,16 +235,27 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
+  AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
-  ProductsRoute: typeof ProductsRoute
+  DashboardRoute: typeof DashboardRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
   QuoteRoute: typeof QuoteRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WishlistRoute: typeof WishlistRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -201,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -213,6 +303,20 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -250,8 +354,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesAgricultureRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/products/categories': {
+      id: '/products/categories'
+      path: '/categories'
+      fullPath: '/products/categories'
+      preLoaderRoute: typeof ProductsCategoriesRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof ProductsRoute
+    }
   }
 }
+
+interface ProductsRouteChildren {
+  ProductsSlugRoute: typeof ProductsSlugRoute
+  ProductsCategoriesRoute: typeof ProductsCategoriesRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  ProductsSlugRoute: ProductsSlugRoute,
+  ProductsCategoriesRoute: ProductsCategoriesRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
 
 interface ServicesRouteChildren {
   ServicesAgricultureRoute: typeof ServicesAgricultureRoute
@@ -272,12 +404,16 @@ const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
+  AuthRoute: AuthRoute,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
-  ProductsRoute: ProductsRoute,
+  DashboardRoute: DashboardRoute,
+  ProductsRoute: ProductsRouteWithChildren,
   QuoteRoute: QuoteRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WishlistRoute: WishlistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -7,6 +7,10 @@ import agriImg from "@/assets/division-agriculture.jpg";
 import valvesImg from "@/assets/division-valves.jpg";
 import insulImg from "@/assets/division-insulation.jpg";
 import { Reveal, SectionHeader } from "@/components/site/Section";
+import { FeaturedProjects } from "@/components/home/FeaturedProjects";
+import { IndustriesServed } from "@/components/home/IndustriesServed";
+import { EngineeringExcellence } from "@/components/home/EngineeringExcellence";
+import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -195,6 +199,18 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* FEATURED PROJECTS */}
+      <FeaturedProjects />
+
+      {/* INDUSTRIES */}
+      <IndustriesServed />
+
+      {/* ENGINEERING EXCELLENCE */}
+      <EngineeringExcellence />
+
+      {/* FEATURED PRODUCTS */}
+      <FeaturedProducts />
 
       {/* STATS */}
       <section className="container-prose py-24 md:py-28">
