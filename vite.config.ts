@@ -4,10 +4,14 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
-  // Force-on nitro with the Vercel preset so `vite build` emits
-  // a Vercel Build Output API v3 bundle at `.vercel/output/`
-  // (auto-detected by Vercel — no outputDirectory needed).
+  // Build the Vercel Build Output API v3 bundle at `.vercel/output/`
+  // (auto-detected by Vercel — no outputDirectory setting required).
   nitro: {
     preset: "vercel",
+    output: {
+      dir: ".vercel/output",
+      publicDir: ".vercel/output/static",
+      serverDir: ".vercel/output/functions/__server.func",
+    },
   },
 });
