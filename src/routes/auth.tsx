@@ -12,7 +12,7 @@ const search = (input: Record<string, unknown>): { tab: Tab } => {
 };
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: zodValidator(search),
+  validateSearch: search,
   head: () => ({
     meta: [
       { title: "Sign in — AASHKOOR" },
