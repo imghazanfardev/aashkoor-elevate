@@ -68,6 +68,7 @@ function ProductDetail() {
   const product = data?.product;
   const [qty, setQty] = useState(1);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
+  const [active, setActive] = useState(0);
   const add = useCart((s) => s.add);
   const cartItems = useCart((s) => s.items);
   const wishHas = useWishlist((s) => s.has);
@@ -91,7 +92,7 @@ function ProductDetail() {
 
   // 4-image "gallery" — repeat product image at varied framings.
   const gallery = [product.image, product.image, product.image, product.image];
-  const [active, setActive] = useState(0);
+
 
   function handleAdd() {
     add(
