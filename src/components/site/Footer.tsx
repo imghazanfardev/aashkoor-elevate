@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import LogoImage from "@/assets/aashkoorw.png";
 
 export function Footer() {
   return (
@@ -8,11 +9,11 @@ export function Footer() {
         <div className="grid gap-14 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <img
-              src="https://ik.imagekit.io/tn3yztqzbb/Asset%201.png"
+              src={LogoImage}
               alt="AASHKOOR"
               className="h-9 w-auto brightness-0 invert"
-              width={140}
-              height={36}
+              width={200}
+              height={50}
             />
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-background/65">
               Engineering excellence across HVAC, agriculture, industrial valves and insulation.

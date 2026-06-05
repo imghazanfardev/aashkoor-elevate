@@ -5,6 +5,7 @@ import { useCart } from "@/lib/stores/cart";
 import { useWishlist } from "@/lib/stores/wishlist";
 import { useDemoAuth } from "@/lib/stores/auth";
 import { SearchDialog } from "./SearchDialog";
+import LogoImage from "@/assets/aashkoor1.png";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -52,11 +53,11 @@ export function Navbar() {
         <div className="container-prose flex h-16 items-center justify-between gap-4 md:h-20">
           <Link to="/" className="flex items-center gap-3" aria-label="AASHKOOR home">
             <img
-              src="https://ik.imagekit.io/tn3yztqzbb/Asset%201.png"
+              src={LogoImage} 
               alt="AASHKOOR"
               className="h-8 w-auto md:h-9"
-              width={140}
-              height={36}
+              width={160}
+              height={40}
             />
           </Link>
 
