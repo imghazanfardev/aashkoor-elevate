@@ -46,7 +46,7 @@ export const Route = createFileRoute("/products/$slug")({
 });
 
 function ProductDetail() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as { product: Product };
   const [qty, setQty] = useState(1);
   const add = useCart((s) => s.add);
   const wishHas = useWishlist((s) => s.has);
