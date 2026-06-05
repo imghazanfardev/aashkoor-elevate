@@ -94,18 +94,19 @@ function ProductDetail() {
   const gallery = [product.image, product.image, product.image, product.image];
 
 
+  const p = product;
   function handleAdd() {
     add(
       {
-        slug: product.slug,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        category: product.category,
+        slug: p.slug,
+        name: p.name,
+        image: p.image,
+        price: p.price,
+        category: p.category,
       },
       qty,
     );
-    toast.success(`Added ${qty} × ${product.name} to cart`);
+    toast.success(`Added ${qty} × ${p.name} to cart`);
   }
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>) {
