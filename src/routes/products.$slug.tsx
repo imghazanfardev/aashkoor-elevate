@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Check, Download, FileText, Heart, ShoppingBag, Star } from "lucide-react";
+import type { Product } from "@/lib/data/products";
 import { getProduct, getRelated } from "@/lib/data/products";
 import { useCart } from "@/lib/stores/cart";
 import { useWishlist } from "@/lib/stores/wishlist";
@@ -45,7 +46,7 @@ export const Route = createFileRoute("/products/$slug")({
 });
 
 function ProductDetail() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as { product: Product };
   const [qty, setQty] = useState(1);
   const add = useCart((s) => s.add);
   const wishHas = useWishlist((s) => s.has);

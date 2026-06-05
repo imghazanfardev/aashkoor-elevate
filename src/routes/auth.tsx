@@ -1,16 +1,18 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-import { z } from "zod";
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Lock, User } from "lucide-react";
 import { useDemoAuth } from "@/lib/stores/auth";
 import { toast } from "sonner";
 
-const search = z.object({ tab: fallback(z.enum(["login", "register", "forgot"]), "login").default("login") });
+type Tab = "login" | "register" | "forgot";
+const search = (input: Record<string, unknown>): { tab: Tab } => {
+  const t = input.tab;
+  return { tab: t === "register" || t === "forgot" ? t : "login" };
+};
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: zodValidator(search),
+  validateSearch: search,
   head: () => ({
     meta: [
       { title: "Sign in — AASHKOOR" },
