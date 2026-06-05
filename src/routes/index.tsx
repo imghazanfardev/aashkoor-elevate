@@ -1,12 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, CheckCircle2, Cog, Leaf, Snowflake, Wrench } from "lucide-react";
-import { motion } from "framer-motion";
-import heroImg from "@/assets/hero-industrial.jpg";
 import hvacImg from "@/assets/division-hvac.jpg";
 import agriImg from "@/assets/division-agriculture.jpg";
 import valvesImg from "@/assets/division-valves.jpg";
 import insulImg from "@/assets/division-insulation.jpg";
 import { Reveal, SectionHeader } from "@/components/site/Section";
+import { HeroSlider } from "@/components/home/HeroSlider";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { IndustriesServed } from "@/components/home/IndustriesServed";
 import { EngineeringExcellence } from "@/components/home/EngineeringExcellence";
@@ -71,63 +70,9 @@ const STATS = [
 function HomePage() {
   return (
     <div>
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img
-            src={heroImg}
-            alt="AASHKOOR industrial facility"
-            className="h-full w-full object-cover"
-            width={1920}
-            height={1080}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-background" />
-        </div>
+      {/* HERO SLIDER */}
+      <HeroSlider />
 
-        <div className="container-prose flex min-h-[88vh] flex-col justify-end pb-20 pt-32 md:min-h-[92vh] md:pb-28">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="eyebrow text-white/70"
-          >
-            Engineering · Supply · Innovation
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="display-hero mt-6 max-w-5xl text-white"
-          >
-            Engineering the systems that power industry.
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-7 max-w-2xl text-lg leading-relaxed text-white/85"
-          >
-            From cooling skylines to feeding nations — AASHKOOR delivers HVAC, agriculture,
-            valves and insulation at enterprise scale, with the precision modern operators demand.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <Link to="/quote" className="btn-primary btn-primary-hover">
-              Request a quote <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              to="/services"
-              className="btn-ghost border-white/30 text-white hover:bg-white/10"
-            >
-              Explore divisions
-            </Link>
-          </motion.div>
-        </div>
-      </section>
 
       {/* INTRO */}
       <section className="container-prose grid gap-10 py-24 md:grid-cols-[1fr_1.4fr] md:py-32">
