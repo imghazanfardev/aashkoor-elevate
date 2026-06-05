@@ -146,11 +146,18 @@ export function CartSheet() {
                 </p>
                 <div className="mt-5 flex flex-col gap-2">
                   <Link
-                    to="/quote"
+                    to="/checkout"
                     onClick={() => setOpen(false)}
                     className="btn-primary btn-primary-hover"
                   >
-                    Proceed to quote request
+                    Proceed to checkout
+                  </Link>
+                  <Link
+                    to="/cart"
+                    onClick={() => setOpen(false)}
+                    className="btn-ghost justify-center"
+                  >
+                    View cart
                   </Link>
                   <button
                     onClick={() => setOpen(false)}
