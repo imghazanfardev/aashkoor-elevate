@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Check, Download, FileText, Heart, ShoppingBag, Star } from "lucide-react";
+import type { Product } from "@/lib/data/products";
 import { getProduct, getRelated } from "@/lib/data/products";
 import { useCart } from "@/lib/stores/cart";
 import { useWishlist } from "@/lib/stores/wishlist";
