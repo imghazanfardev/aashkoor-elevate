@@ -129,7 +129,7 @@ function AuthPage() {
         </form>
 
         <p className="mt-6 text-xs text-muted-foreground">
-          Demo authentication for preview. Full Lovable Cloud auth wires in seamlessly next.
+          Demo authentication for preview. Full authentication wires in seamlessly next.
         </p>
       </motion.div>
 
