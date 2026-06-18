@@ -70,7 +70,7 @@ function Page() {
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-foreground/10 p-10 md:flex-row md:items-center md:p-14">
             <h3 className="display-section">Need a specific spec?</h3>
-            <Link to="/quote" className="btn-primary btn-primary-hover">Request a quote</Link>
+            <Link to="/quote" search={{ product: "" }} className="btn-primary btn-primary-hover">Request a quote</Link>
           </div>
         </Reveal>
       </section>

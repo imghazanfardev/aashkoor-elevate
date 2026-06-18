@@ -19,7 +19,7 @@ export function Footer() {
               Engineering excellence across HVAC, agriculture, industrial valves and insulation.
               Trusted by enterprises building tomorrow.
             </p>
-            <Link to="/quote" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+            <Link to="/quote" search={{ product: "" }} className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-primary">
               Start a project <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>

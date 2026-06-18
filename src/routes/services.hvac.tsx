@@ -76,7 +76,7 @@ function CtaBlock() {
       <Reveal>
         <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-primary px-10 py-12 text-primary-foreground md:flex-row md:items-center md:px-14">
           <h3 className="font-display text-2xl font-bold md:text-3xl">Ready to brief our HVAC team?</h3>
-          <Link to="/quote" className="inline-flex items-center gap-2 rounded-full bg-background px-6 py-3 font-semibold text-foreground">
+          <Link to="/quote" search={{ product: "" }} className="inline-flex items-center gap-2 rounded-full bg-background px-6 py-3 font-semibold text-foreground">
             Request a quote <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

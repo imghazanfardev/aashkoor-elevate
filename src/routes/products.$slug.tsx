@@ -1,24 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  Download,
-  FileText,
-  Heart,
-  ShoppingBag,
-  ShoppingCart,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, Check, Download, FileText, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Product } from "@/lib/data/products";
 import { getProduct, getRelated } from "@/lib/data/products";
-import { useCart } from "@/lib/stores/cart";
-import { useWishlist } from "@/lib/stores/wishlist";
-import { money } from "@/lib/format";
 import { ProductCard } from "@/components/site/ProductCard";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/products/$slug")({
   loader: ({ params }) => {
@@ -43,9 +29,6 @@ export const Route = createFileRoute("/products/$slug")({
   notFoundComponent: () => (
     <div className="container-prose py-32 text-center">
       <h1 className="display-section">Product not found</h1>
-      <p className="mt-3 text-muted-foreground">
-        The product you're looking for is no longer in our catalogue.
-      </p>
       <Link to="/products" className="btn-primary btn-primary-hover mt-8 inline-flex">
         Back to catalogue
       </Link>
@@ -63,16 +46,26 @@ export const Route = createFileRoute("/products/$slug")({
   component: ProductDetail,
 });
 
+const FAQS = [
+  { q: "What lead times can I expect?", a: "Stock items typically ship in 5–10 business days. Made-to-order configurations are 4–6 weeks." },
+  { q: "Do you provide certificates of conformity?", a: "Yes — EN 10204 3.1/3.2 mill certificates and full traceability are included on request." },
+  { q: "Can you support installation and commissioning?", a: "Our field engineering team can support site survey, installation oversight and commissioning across all regions we serve." },
+  { q: "What payment terms are available?", a: "Standard terms are 30% advance, 70% on delivery. LC and project-based terms are available for qualified accounts." },
+];
+
+const APPLICATIONS = [
+  "Oil, gas & petrochemical facilities",
+  "Water treatment and desalination",
+  "Industrial HVAC and district cooling",
+  "Power generation",
+  "Marine & offshore",
+];
+
 function ProductDetail() {
   const data = Route.useLoaderData() as { product: Product } | undefined;
   const product = data?.product;
-  const [qty, setQty] = useState(1);
-  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const [active, setActive] = useState(0);
-  const add = useCart((s) => s.add);
-  const cartItems = useCart((s) => s.items);
-  const wishHas = useWishlist((s) => s.has);
-  const wishToggle = useWishlist((s) => s.toggle);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   if (!product) {
     return (
@@ -85,37 +78,8 @@ function ProductDetail() {
     );
   }
 
-  const liked = wishHas(product.slug);
   const related = getRelated(product.slug);
-  const inCart = cartItems.find((i) => i.slug === product.slug);
-  const cartQty = inCart?.qty ?? 0;
-
-  // 4-image "gallery" — repeat product image at varied framings.
   const gallery = [product.image, product.image, product.image, product.image];
-
-
-  const p = product;
-  function handleAdd() {
-    add(
-      {
-        slug: p.slug,
-        name: p.name,
-        image: p.image,
-        price: p.price,
-        category: p.category,
-      },
-      qty,
-    );
-    toast.success(`Added ${qty} × ${p.name} to cart`);
-  }
-
-  function handleMove(e: React.MouseEvent<HTMLDivElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
-    setZoom({
-      x: ((e.clientX - r.left) / r.width) * 100,
-      y: ((e.clientY - r.top) / r.height) * 100,
-    });
-  }
 
   return (
     <div>
@@ -127,22 +91,14 @@ function ProductDetail() {
           <span>/</span>
           <span className="text-foreground">{product.name}</span>
         </nav>
-        <Link
-          to="/products"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-        >
+        <Link to="/products" className="mt-4 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Back to catalogue
         </Link>
       </div>
 
       <section className="container-prose grid gap-12 py-10 md:py-14 lg:grid-cols-[1.1fr_1fr]">
-        {/* GALLERY */}
         <div className="flex flex-col gap-4">
-          <div
-            className="relative aspect-square overflow-hidden rounded-3xl bg-[var(--color-surface)]"
-            onMouseMove={handleMove}
-            onMouseLeave={() => setZoom(null)}
-          >
+          <div className="relative aspect-square overflow-hidden rounded-3xl bg-[var(--color-surface)]">
             <motion.img
               key={active}
               initial={{ opacity: 0, scale: 1.02 }}
@@ -152,21 +108,8 @@ function ProductDetail() {
               alt={product.name}
               width={896}
               height={896}
-              className="h-full w-full object-contain p-12 transition-transform duration-200"
-              style={
-                zoom
-                  ? {
-                      transform: `scale(1.8)`,
-                      transformOrigin: `${zoom.x}% ${zoom.y}%`,
-                    }
-                  : undefined
-              }
+              className="h-full w-full object-contain p-12"
             />
-            {zoom && (
-              <span className="pointer-events-none absolute bottom-3 right-3 rounded-full bg-foreground/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-background">
-                Hover to zoom
-              </span>
-            )}
           </div>
           <div className="grid grid-cols-4 gap-3">
             {gallery.map((src, i) => (
@@ -184,7 +127,6 @@ function ProductDetail() {
           </div>
         </div>
 
-        {/* INFO */}
         <div>
           <p className="eyebrow text-primary">{product.category}</p>
           <h1 className="display-section mt-3">{product.name}</h1>
@@ -209,93 +151,25 @@ function ProductDetail() {
 
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{product.description}</p>
 
-          <div className="mt-8 flex items-end gap-6">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">Indicative price</p>
-              <p className="font-display text-4xl font-extrabold tracking-tight">{money(product.price)}</p>
-            </div>
-            <span
-              className={`mb-1 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-                product.inStock ? "bg-primary/10 text-primary" : "bg-warning/15 text-foreground/70"
-              }`}
-            >
-              <Check className="h-3 w-3" /> {product.inStock ? "In stock" : "Lead time 4–6 weeks"}
+          <div className="mt-6">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+              <Check className="h-3 w-3" /> {product.inStock ? "Available — quick lead time" : "Made to order · 4–6 weeks"}
             </span>
           </div>
 
-          {/* Quantity + actions */}
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <div className="inline-flex items-center rounded-full border border-foreground/15">
-              <button
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="h-11 w-11 text-lg"
-                aria-label="Decrease quantity"
-              >
-                −
-              </button>
-              <span className="w-10 text-center font-semibold tabular-nums">{qty}</span>
-              <button
-                onClick={() => setQty((q) => q + 1)}
-                className="h-11 w-11 text-lg"
-                aria-label="Increase quantity"
-              >
-                +
-              </button>
-            </div>
-            <button onClick={handleAdd} className="btn-primary btn-primary-hover">
-              <ShoppingBag className="h-4 w-4" /> Add to cart
-            </button>
-            <button
-              onClick={() => {
-                wishToggle(product.slug);
-                toast.success(liked ? "Removed from wishlist" : "Saved to wishlist");
-              }}
-              className={`inline-flex h-12 w-12 items-center justify-center rounded-full border transition-colors ${
-                liked
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-foreground/15 hover:border-foreground/40"
-              }`}
-              aria-label="Toggle wishlist"
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              to="/quote"
+              search={{ product: product.slug }}
+              className="btn-primary btn-primary-hover"
             >
-              <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
-            </button>
-          </div>
-
-          {/* Cart status + checkout CTA */}
-          {cartQty > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-5 flex flex-col gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="flex items-center gap-3 text-sm">
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <ShoppingCart className="h-4 w-4" />
-                </span>
-                <span>
-                  <strong className="font-semibold text-foreground">{cartQty}</strong> in your cart ·{" "}
-                  <span className="text-muted-foreground">{money(product.price * cartQty)}</span>
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Link to="/cart" className="btn-ghost">
-                  View cart
-                </Link>
-                <Link to="/checkout" className="btn-primary btn-primary-hover">
-                  Checkout <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Quote request alt path */}
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link to="/quote" className="btn-ghost">
-              <FileText className="h-4 w-4" /> Request a custom quote
+              <FileText className="h-4 w-4" /> Request Quote
+            </Link>
+            <Link to="/contact" className="btn-ghost">
+              Talk to an engineer
             </Link>
           </div>
 
-          {/* Specs */}
           <div className="mt-10 rounded-2xl border border-foreground/10 bg-card p-6">
             <h3 className="font-display text-lg font-bold">Technical specifications</h3>
             <dl className="mt-4 divide-y divide-foreground/10">
@@ -308,25 +182,64 @@ function ProductDetail() {
             </dl>
           </div>
 
-          {/* Downloads */}
           {product.downloads.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-3">
-              {product.downloads.map((d) => (
-                <a
-                  key={d.label}
-                  href={d.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm font-semibold hover:border-foreground/40"
-                >
-                  <Download className="h-4 w-4" /> {d.label}
-                </a>
-              ))}
+            <div className="mt-6">
+              <h3 className="font-display text-lg font-bold">Downloads & datasheets</h3>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {product.downloads.map((d) => (
+                  <a
+                    key={d.label}
+                    href={d.href}
+                    className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm font-semibold hover:border-foreground/40"
+                  >
+                    <Download className="h-4 w-4" /> {d.label}
+                  </a>
+                ))}
+              </div>
             </div>
           )}
         </div>
       </section>
 
+      <section className="bg-[var(--color-surface)]">
+        <div className="container-prose grid gap-12 py-20 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow text-primary">Applications</p>
+            <h2 className="display-section mt-3">Built for demanding environments.</h2>
+            <ul className="mt-8 space-y-3">
+              {APPLICATIONS.map((a) => (
+                <li key={a} className="flex items-start gap-3 text-foreground/85">
+                  <Check className="mt-0.5 h-5 w-5 text-primary" />
+                  <span>{a}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="eyebrow text-primary">Frequently asked</p>
+            <h2 className="display-section mt-3">Specifying with confidence.</h2>
+            <ul className="mt-8 divide-y divide-foreground/10 rounded-2xl border border-foreground/10 bg-card">
+              {FAQS.map((f, i) => (
+                <li key={f.q}>
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold"
+                  >
+                    {f.q}
+                    <span className="text-muted-foreground">{openFaq === i ? "−" : "+"}</span>
+                  </button>
+                  {openFaq === i && (
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {related.length > 0 && (
-        <section className="bg-[var(--color-surface)]">
+        <section>
           <div className="container-prose py-20">
             <h2 className="display-section">Related products</h2>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
