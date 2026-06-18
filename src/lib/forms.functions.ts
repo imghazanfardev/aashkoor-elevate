@@ -70,10 +70,8 @@ export const submitContact = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-// ===== Admin server functions =====
-
-async function assertAdmin(supabase: Awaited<ReturnType<typeof import("@supabase/supabase-js").createClient>>, userId: string) {
-  const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
+async function assertAdmin(context: { supabase: { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }; userId: string }) {
+  const { data, error } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   if (error || !data) throw new Error("Forbidden: admin role required");
 }
 
