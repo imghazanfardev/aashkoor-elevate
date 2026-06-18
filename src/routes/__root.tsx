@@ -15,7 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "sonner";
-import { CartSheet } from "@/components/site/CartSheet";
+
 
 function NotFoundComponent() {
   return (
@@ -155,7 +155,6 @@ function Shell() {
         <Outlet />
       </main>
       <Footer />
-      <CartSheet />
       <Toaster richColors position="top-right" />
     </>
   );

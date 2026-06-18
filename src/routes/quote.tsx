@@ -3,17 +3,20 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitQuote } from "@/lib/forms.functions";
 import { Reveal } from "@/components/site/Section";
+import { getProduct } from "@/lib/data/products";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Package } from "lucide-react";
 
 export const Route = createFileRoute("/quote")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    product: typeof s.product === "string" ? s.product : "",
+  }),
   head: () => ({
     meta: [
       { title: "Request a Quote — AASHKOOR" },
       { name: "description", content: "Brief our engineering team and receive a tailored proposal." },
       { property: "og:title", content: "Request a Quote — AASHKOOR" },
       { property: "og:description", content: "Get a tailored proposal within two business days." },
-      { property: "og:url", content: "/quote" },
     ],
     links: [{ rel: "canonical", href: "/quote" }],
   }),
@@ -21,23 +24,27 @@ export const Route = createFileRoute("/quote")({
 });
 
 type Form = {
-  name: string; company: string; email: string; phone: string;
-  industry: string; division: string; products: string; budget: string; details: string;
+  name: string; company: string; email: string; phone: string; country: string;
+  industry: string; division: string; details: string;
 };
 
 const EMPTY: Form = {
-  name: "", company: "", email: "", phone: "",
-  industry: "", division: "", products: "", budget: "", details: "",
+  name: "", company: "", email: "", phone: "", country: "",
+  industry: "", division: "", details: "",
 };
 
-const DIVISIONS = ["HVAC", "Agriculture", "General Valves", "Industrial Insulation", "Multiple / Not sure"];
-const BUDGETS = ["Under $10k", "$10k – $50k", "$50k – $250k", "$250k – $1M", "$1M+"];
+const DIVISIONS = ["Valves", "Insulation", "HVAC", "Agriculture", "Multiple / Not sure"];
 
 function QuotePage() {
+  const { product: productSlug } = Route.useSearch();
+  const product = productSlug ? getProduct(productSlug) : undefined;
   const navigate = useNavigate();
   const submit = useServerFn(submitQuote);
   const [step, setStep] = useState(0);
-  const [form, setForm] = useState<Form>(EMPTY);
+  const [form, setForm] = useState<Form>({
+    ...EMPTY,
+    division: product?.category ?? "",
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const update = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -53,34 +60,25 @@ function QuotePage() {
           <Field label="Company" value={form.company} onChange={update("company")} />
           <Field label="Email *" type="email" value={form.email} onChange={update("email")} />
           <Field label="Phone" value={form.phone} onChange={update("phone")} />
-        </div>
-      ),
-    },
-    {
-      title: "About your project",
-      valid: !!form.division,
-      content: (
-        <div className="grid gap-5 md:grid-cols-2">
+          <Field label="Country" value={form.country} onChange={update("country")} />
           <Field label="Industry" value={form.industry} onChange={update("industry")} placeholder="e.g. Oil & Gas, Real estate" />
-          <SelectField label="Division of interest *" value={form.division} onChange={update("division")} options={DIVISIONS} />
-          <SelectField label="Approximate budget" value={form.budget} onChange={update("budget")} options={BUDGETS} />
-          <Field label="Products / services needed" value={form.products} onChange={update("products")} />
         </div>
       ),
     },
     {
-      title: "Project details",
+      title: "Project requirements",
       valid: true,
       content: (
         <div className="grid gap-5">
+          <SelectField label="Division of interest" value={form.division} onChange={update("division")} options={DIVISIONS} />
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-foreground/80">Tell us about the project</span>
+            <span className="text-sm font-medium text-foreground/80">Tell us about your requirements</span>
             <textarea
               value={form.details}
               onChange={update("details")}
-              rows={6}
+              rows={7}
               className="rounded-2xl border border-foreground/15 bg-background px-4 py-3 text-sm outline-none transition focus:border-primary"
-              placeholder="Scope, timeline, location, key constraints…"
+              placeholder="Quantities, specifications, timeline, location, key constraints…"
             />
           </label>
         </div>
@@ -93,7 +91,15 @@ function QuotePage() {
   async function onSubmit() {
     try {
       setSubmitting(true);
-      await submit({ data: form });
+      await submit({
+        data: {
+          ...form,
+          product_slug: product?.slug ?? "",
+          product_name: product?.name ?? "",
+          product_category: product?.category ?? "",
+          product_url: product ? `/products/${product.slug}` : "",
+        },
+      });
       toast.success("Quote request received — we'll be in touch within 2 business days.");
       navigate({ to: "/" });
     } catch (e) {
@@ -109,12 +115,28 @@ function QuotePage() {
         <Reveal>
           <p className="eyebrow">Request a quote</p>
           <h1 className="display-section mt-4 text-balance">
-            Brief our team in a few minutes.
+            {product ? "Quote this product." : "Brief our team in a few minutes."}
           </h1>
           <p className="mt-5 text-muted-foreground">
-            Tell us a little about the project — our engineers will respond with a tailored
-            proposal within two business days.
+            Tell us a little about the project — our engineers will respond with a tailored proposal
+            within two business days.
           </p>
+
+          {product && (
+            <div className="mt-8 flex gap-4 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+              <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-background">
+                <img src={product.image} alt={product.name} className="h-full w-full object-contain p-2" />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-wider text-primary flex items-center gap-1">
+                  <Package className="h-3 w-3" /> Requesting quote for
+                </p>
+                <p className="mt-1 font-display text-base font-bold">{product.name}</p>
+                <p className="text-xs text-muted-foreground">{product.category} · SKU {product.sku}</p>
+              </div>
+            </div>
+          )}
+
           <ul className="mt-10 space-y-3 text-sm">
             {["No-cost proposal", "Senior engineer assigned to your brief", "Confidential & secure"].map((b) => (
               <li key={b} className="flex items-center gap-2 text-foreground/80">
@@ -137,9 +159,7 @@ function QuotePage() {
               ))}
             </div>
             <h2 className="font-display text-xl font-bold md:text-2xl">{current.title}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Step {step + 1} of {steps.length}
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">Step {step + 1} of {steps.length}</p>
             <div className="mt-8">{current.content}</div>
 
             <div className="mt-10 flex items-center justify-between">
