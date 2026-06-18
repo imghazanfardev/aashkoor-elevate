@@ -210,7 +210,7 @@ function HomePage() {
                 Brief our team in minutes — receive a tailored proposal within two business days.
               </p>
             </div>
-            <Link to="/quote" className="btn-primary btn-primary-hover">
+            <Link to="/quote" search={{ product: "" }} className="btn-primary btn-primary-hover">
               Start your quote <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

@@ -68,7 +68,7 @@ function AgriPage() {
         <Reveal>
           <div className="flex flex-col items-start justify-between gap-6 rounded-3xl bg-[var(--color-foreground)] px-10 py-12 text-background md:flex-row md:items-center md:px-14">
             <h3 className="font-display text-2xl font-bold md:text-3xl">Planning a project?</h3>
-            <Link to="/quote" className="btn-primary btn-primary-hover">
+            <Link to="/quote" search={{ product: "" }} className="btn-primary btn-primary-hover">
               Talk to our agronomists <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

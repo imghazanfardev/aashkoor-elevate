@@ -66,7 +66,7 @@ export function Navbar() {
               <Search className="h-4.5 w-4.5" />
             </button>
 
-            <Link to="/quote" className="btn-primary btn-primary-hover ml-1 hidden md:inline-flex">
+            <Link to="/quote" search={{ product: "" }} className="btn-primary btn-primary-hover ml-1 hidden md:inline-flex">
               Request Quote
             </Link>
 

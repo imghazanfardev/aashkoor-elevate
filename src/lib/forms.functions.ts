@@ -70,33 +70,85 @@ export const submitContact = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-async function assertAdmin(context: { supabase: { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }; userId: string }) {
-  const { data, error } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+// ===== Admin server functions =====
+// Helper avoids strict SupabaseClient typing by using a minimal duck-typed shape.
+
+type AdminContext = {
+  supabase: {
+    rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
+    from: (table: string) => {
+      select: (cols: string) => {
+        order: (col: string, opts: { ascending: boolean }) => Promise<{ data: unknown; error: { message: string } | null }>;
+      };
+      update: (vals: Record<string, unknown>) => {
+        eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      };
+      delete: () => {
+        eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
+      };
+    };
+  };
+  userId: string;
+};
+
+async function assertAdmin(ctx: AdminContext) {
+  const { data, error } = await ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "admin" });
   if (error || !data) throw new Error("Forbidden: admin role required");
 }
+
+export type QuoteRow = {
+  id: string;
+  name: string;
+  company: string | null;
+  email: string;
+  phone: string | null;
+  country: string | null;
+  industry: string | null;
+  division: string | null;
+  details: string | null;
+  product_slug: string | null;
+  product_name: string | null;
+  product_category: string | null;
+  product_url: string | null;
+  status: string;
+  created_at: string;
+  admin_notes: string | null;
+};
+
+export type ContactRow = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  subject: string | null;
+  message: string;
+  status: string;
+  archived: boolean;
+  created_at: string;
+};
 
 export const listQuotes = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    await assertAdmin(context as unknown as AdminContext);
+    const res = await (context as unknown as AdminContext).supabase
       .from("quote_requests")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    return data ?? [];
+    if (res.error) throw new Error(res.error.message);
+    return (res.data ?? []) as QuoteRow[];
   });
 
 export const listContacts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { data, error } = await context.supabase
+    await assertAdmin(context as unknown as AdminContext);
+    const res = await (context as unknown as AdminContext).supabase
       .from("contact_submissions")
       .select("*")
       .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    return data ?? [];
+    if (res.error) throw new Error(res.error.message);
+    return (res.data ?? []) as ContactRow[];
   });
 
 const statusUpdateSchema = z.object({
@@ -109,12 +161,13 @@ export const updateQuoteStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => statusUpdateSchema.parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase
+    const ctx = context as unknown as AdminContext;
+    await assertAdmin(ctx);
+    const res = await ctx.supabase
       .from("quote_requests")
       .update({ status: data.status, admin_notes: data.admin_notes ?? null })
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (res.error) throw new Error(res.error.message);
     return { ok: true as const };
   });
 
@@ -127,12 +180,13 @@ export const updateContactStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => contactStatusSchema.parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase
+    const ctx = context as unknown as AdminContext;
+    await assertAdmin(ctx);
+    const res = await ctx.supabase
       .from("contact_submissions")
       .update({ status: data.status, archived: data.status === "archived" })
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    if (res.error) throw new Error(res.error.message);
     return { ok: true as const };
   });
 
@@ -142,9 +196,10 @@ export const deleteQuote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => deleteSchema.parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase.from("quote_requests").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
+    const ctx = context as unknown as AdminContext;
+    await assertAdmin(ctx);
+    const res = await ctx.supabase.from("quote_requests").delete().eq("id", data.id);
+    if (res.error) throw new Error(res.error.message);
     return { ok: true as const };
   });
 
@@ -152,8 +207,9 @@ export const deleteContact = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => deleteSchema.parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context.supabase, context.userId);
-    const { error } = await context.supabase.from("contact_submissions").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
+    const ctx = context as unknown as AdminContext;
+    await assertAdmin(ctx);
+    const res = await ctx.supabase.from("contact_submissions").delete().eq("id", data.id);
+    if (res.error) throw new Error(res.error.message);
     return { ok: true as const };
   });
