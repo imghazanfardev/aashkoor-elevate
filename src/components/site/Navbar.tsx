@@ -95,6 +95,7 @@ export function Navbar() {
               ))}
               <Link
                 to="/quote"
+                search={{ product: "" }}
                 onClick={() => setOpen(false)}
                 className="btn-primary btn-primary-hover mt-3 self-start"
               >
