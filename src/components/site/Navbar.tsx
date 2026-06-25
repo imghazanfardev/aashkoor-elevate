@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, Search, X } from "lucide-react";
 import { SearchDialog } from "./SearchDialog";
-import LogoImage from "@/assets/aashkoor1.png";
+const LogoImage = "https://ik.imagekit.io/tn3yztqzbb/aashkoor1.png";
 
 const NAV = [
   { to: "/", label: "Home" },
