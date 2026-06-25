@@ -21,7 +21,7 @@ export function ProductCard({ product, delay = 0 }: { product: Product; delay?: 
           height={896}
           className="h-full w-full object-contain p-6 transition-transform duration-700 group-hover:scale-105"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-background">
+        <span className="absolute bottom-3 left-3 rounded-full bg-background/95 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground shadow-[var(--shadow-soft)] backdrop-blur">
           {product.category}
         </span>
       </div>

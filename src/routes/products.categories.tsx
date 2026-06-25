@@ -1,13 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, Cog, Leaf, Snowflake, Wrench } from "lucide-react";
+import { ArrowUpRight, Cog, Wrench } from "lucide-react";
 import { Reveal, SectionHeader } from "@/components/site/Section";
-import { PRODUCTS } from "@/lib/data/products";
+import { PRODUCTS, type ProductCategory } from "@/lib/data/products";
 
 export const Route = createFileRoute("/products/categories")({
   head: () => ({
     meta: [
       { title: "Product Categories — AASHKOOR" },
-      { name: "description", content: "Explore AASHKOOR product categories: HVAC, Agriculture, Valves and Insulation." },
+      { name: "description", content: "Explore AASHKOOR product categories: Valves and Insulation Products." },
       { property: "og:title", content: "Product Categories — AASHKOOR" },
     ],
     links: [{ rel: "canonical", href: "/products/categories" }],
@@ -15,12 +15,10 @@ export const Route = createFileRoute("/products/categories")({
   component: CategoriesPage,
 });
 
-const CATEGORY_CARDS = [
+const CATEGORY_CARDS: { name: ProductCategory; icon: typeof Cog; color: string; blurb: string }[] = [
   { name: "Valves", icon: Cog, color: "from-primary/20 to-primary/5", blurb: "Gate, ball, butterfly, globe and check valves engineered for industrial service." },
-  { name: "Insulation", icon: Wrench, color: "from-accent/20 to-accent/5", blurb: "Thermal, acoustic and refractory insulation systems for plants, pipework and envelopes." },
-  { name: "HVAC", icon: Snowflake, color: "from-accent/15 to-primary/10", blurb: "HVAC components, chillers, AHUs and BMS-ready modular plant." },
-  { name: "Agriculture", icon: Leaf, color: "from-primary/15 to-primary/5", blurb: "Smart irrigation, precision sensing and complete agriculture supply." },
-] as const;
+  { name: "Insulation Products", icon: Wrench, color: "from-accent/20 to-accent/5", blurb: "Thermal, acoustic and refractory insulation systems for plants, pipework and envelopes." },
+];
 
 function CategoriesPage() {
   return (
@@ -33,6 +31,7 @@ function CategoriesPage() {
         />
 
         <div className="mt-14 grid gap-6 md:grid-cols-2">
+
           {CATEGORY_CARDS.map((c, i) => {
             const count = PRODUCTS.filter((p) => p.category === c.name).length;
             return (

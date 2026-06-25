@@ -20,9 +20,9 @@ export const Route = createFileRoute("/products")({
 });
 
 type Cat = ProductCategory | "All";
-type Sort = "featured" | "price-asc" | "price-desc" | "name";
+type Sort = "featured" | "name";
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
 
 function ProductsPage() {
   const [cat, setCat] = useState<Cat>("All");
@@ -42,8 +42,6 @@ function ProductsPage() {
       );
     }
     const sorted = [...list];
-    if (sort === "price-asc") sorted.sort((a, b) => a.price - b.price);
-    if (sort === "price-desc") sorted.sort((a, b) => b.price - a.price);
     if (sort === "name") sorted.sort((a, b) => a.name.localeCompare(b.name));
     return sorted;
   }, [cat, q, sort]);
@@ -102,8 +100,6 @@ function ProductsPage() {
                 className="h-11 appearance-none rounded-full border border-foreground/15 bg-background pl-10 pr-8 text-sm font-medium focus:border-primary focus:outline-none"
               >
                 <option value="featured">Sort: Featured</option>
-                <option value="price-asc">Price: Low → High</option>
-                <option value="price-desc">Price: High → Low</option>
                 <option value="name">Name: A → Z</option>
               </select>
             </div>
