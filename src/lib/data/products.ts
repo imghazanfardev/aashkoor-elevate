@@ -140,7 +140,8 @@ const INSULATION_NAMES = [
 ];
 
 const INSULATION_FILE: Record<string, string> = {
-  // Filename pattern mirrors the valves folder: Title-With-Dashes.png
+  "Mineral Wool Blankets (Rolls)": "https://ik.imagekit.io/tn3yztqzbb/AASHKOOR%20INSULATION%20FOLDER/Mineral-Wool-Blankets-(Rolls).png?updatedAt=1782395606648",
+  "Mineral Wool Boards (Slabs)": "https://ik.imagekit.io/tn3yztqzbb/AASHKOOR%20INSULATION%20FOLDER/Mineral-Wool-Boards-(Slabs).png?updatedAt=1782395606788",
 };
 
 const INSULATION_SEEDS: Seed[] = INSULATION_NAMES.map((name) => {
@@ -164,12 +165,14 @@ const INSULATION_SEEDS: Seed[] = INSULATION_NAMES.map((name) => {
 
 function build(seed: Seed, idx: number): Product {
   const slug = slugify(seed.name);
-  const base = seed.category === "Valves" ? VALVE_BASE : INSULATION_BASE;
+  const image = seed.imageFile.startsWith("http")
+    ? seed.imageFile
+    : `${seed.category === "Valves" ? VALVE_BASE : INSULATION_BASE}/${seed.imageFile}`;
   return {
     slug,
     name: seed.name,
     category: seed.category,
-    image: `${base}/${seed.imageFile}`,
+    image,
     blurb: seed.blurb,
     description: seed.description,
     sku: `AK-${seed.category === "Valves" ? "VL" : "IN"}-${String(idx + 1).padStart(3, "0")}`,
