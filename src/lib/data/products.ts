@@ -165,12 +165,14 @@ const INSULATION_SEEDS: Seed[] = INSULATION_NAMES.map((name) => {
 
 function build(seed: Seed, idx: number): Product {
   const slug = slugify(seed.name);
-  const base = seed.category === "Valves" ? VALVE_BASE : INSULATION_BASE;
+  const image = seed.imageFile.startsWith("http")
+    ? seed.imageFile
+    : `${seed.category === "Valves" ? VALVE_BASE : INSULATION_BASE}/${seed.imageFile}`;
   return {
     slug,
     name: seed.name,
     category: seed.category,
-    image: `${base}/${seed.imageFile}`,
+    image,
     blurb: seed.blurb,
     description: seed.description,
     sku: `AK-${seed.category === "Valves" ? "VL" : "IN"}-${String(idx + 1).padStart(3, "0")}`,
