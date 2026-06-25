@@ -140,7 +140,8 @@ const INSULATION_NAMES = [
 ];
 
 const INSULATION_FILE: Record<string, string> = {
-  // Filename pattern mirrors the valves folder: Title-With-Dashes.png
+  "Mineral Wool Blankets (Rolls)": "https://ik.imagekit.io/tn3yztqzbb/AASHKOOR%20INSULATION%20FOLDER/Mineral-Wool-Blankets-(Rolls).png?updatedAt=1782395606648",
+  "Mineral Wool Boards (Slabs)": "https://ik.imagekit.io/tn3yztqzbb/AASHKOOR%20INSULATION%20FOLDER/Mineral-Wool-Boards-(Slabs).png?updatedAt=1782395606788",
 };
 
 const INSULATION_SEEDS: Seed[] = INSULATION_NAMES.map((name) => {
