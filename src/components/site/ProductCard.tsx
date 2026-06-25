@@ -21,16 +21,16 @@ export function ProductCard({ product, delay = 0 }: { product: Product; delay?: 
           height={896}
           className="h-full w-full object-contain p-6 transition-transform duration-700 group-hover:scale-105"
         />
-        <span className="absolute left-3 top-3 rounded-full bg-foreground/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-background">
-          {product.category}
-        </span>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
+        <span className="inline-flex w-fit items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+          {product.category}
+        </span>
         <Link
           to="/products/$slug"
           params={{ slug: product.slug }}
-          className="font-display text-lg font-semibold leading-snug tracking-tight hover:text-primary"
+          className="mt-3 font-display text-lg font-semibold leading-snug tracking-tight hover:text-primary"
         >
           {product.name}
         </Link>
