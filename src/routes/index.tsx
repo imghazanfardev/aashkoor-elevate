@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, CheckCircle2, Cog, Leaf, Snowflake, Wrench } from "lucide-react";
-import hvacImg from "@/assets/division-hvac.jpg";
-import agriImg from "@/assets/division-agriculture.jpg";
+import { ArrowRight, ArrowUpRight, CheckCircle2, Cog, Wrench } from "lucide-react";
 import valvesImg from "@/assets/division-valves.jpg";
 import insulImg from "@/assets/division-insulation.jpg";
 import { Reveal, SectionHeader } from "@/components/site/Section";
