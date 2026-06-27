@@ -9,16 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ValvesRouteImport } from './routes/valves'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as IndustrialInsulationRouteImport } from './routes/industrial-insulation'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminAccessRouteImport } from './routes/admin-access'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ServicesIndustrialSupplyRouteImport } from './routes/services.industrial-supply'
 import { Route as ServicesHvacRouteImport } from './routes/services.hvac'
 import { Route as ServicesAgricultureRouteImport } from './routes/services.agriculture'
@@ -26,6 +29,11 @@ import { Route as ProductsCategoriesRouteImport } from './routes/products.catego
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const ValvesRoute = ValvesRouteImport.update({
+  id: '/valves',
+  path: '/valves',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -44,6 +52,11 @@ const QuoteRoute = QuoteRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustrialInsulationRoute = IndustrialInsulationRouteImport.update({
+  id: '/industrial-insulation',
+  path: '/industrial-insulation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -74,6 +87,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProductsRoute,
 } as any)
 const ServicesIndustrialSupplyRoute =
   ServicesIndustrialSupplyRouteImport.update({
@@ -113,16 +131,19 @@ export interface FileRoutesByFullPath {
   '/admin-access': typeof AdminAccessRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/industrial-insulation': typeof IndustrialInsulationRoute
   '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/valves': typeof ValvesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -130,16 +151,18 @@ export interface FileRoutesByTo {
   '/admin-access': typeof AdminAccessRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
-  '/products': typeof ProductsRouteWithChildren
+  '/industrial-insulation': typeof IndustrialInsulationRoute
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/valves': typeof ValvesRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
+  '/products': typeof ProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -149,16 +172,19 @@ export interface FileRoutesById {
   '/admin-access': typeof AdminAccessRoute
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
+  '/industrial-insulation': typeof IndustrialInsulationRoute
   '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/valves': typeof ValvesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/categories': typeof ProductsCategoriesRoute
   '/services/agriculture': typeof ServicesAgricultureRoute
   '/services/hvac': typeof ServicesHvacRoute
   '/services/industrial-supply': typeof ServicesIndustrialSupplyRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,16 +194,19 @@ export interface FileRouteTypes {
     | '/admin-access'
     | '/blog'
     | '/contact'
+    | '/industrial-insulation'
     | '/products'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/valves'
     | '/admin'
     | '/products/$slug'
     | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
+    | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -185,16 +214,18 @@ export interface FileRouteTypes {
     | '/admin-access'
     | '/blog'
     | '/contact'
-    | '/products'
+    | '/industrial-insulation'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/valves'
     | '/admin'
     | '/products/$slug'
     | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
+    | '/products'
   id:
     | '__root__'
     | '/'
@@ -203,16 +234,19 @@ export interface FileRouteTypes {
     | '/admin-access'
     | '/blog'
     | '/contact'
+    | '/industrial-insulation'
     | '/products'
     | '/quote'
     | '/services'
     | '/sitemap.xml'
+    | '/valves'
     | '/_authenticated/admin'
     | '/products/$slug'
     | '/products/categories'
     | '/services/agriculture'
     | '/services/hvac'
     | '/services/industrial-supply'
+    | '/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -222,14 +256,23 @@ export interface RootRouteChildren {
   AdminAccessRoute: typeof AdminAccessRoute
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
+  IndustrialInsulationRoute: typeof IndustrialInsulationRoute
   ProductsRoute: typeof ProductsRouteWithChildren
   QuoteRoute: typeof QuoteRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ValvesRoute: typeof ValvesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/valves': {
+      id: '/valves'
+      path: '/valves'
+      fullPath: '/valves'
+      preLoaderRoute: typeof ValvesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -256,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industrial-insulation': {
+      id: '/industrial-insulation'
+      path: '/industrial-insulation'
+      fullPath: '/industrial-insulation'
+      preLoaderRoute: typeof IndustrialInsulationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -299,6 +349,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/products/': {
+      id: '/products/'
+      path: '/'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof ProductsRoute
     }
     '/services/industrial-supply': {
       id: '/services/industrial-supply'
@@ -359,11 +416,13 @@ const AuthenticatedRouteRouteWithChildren =
 interface ProductsRouteChildren {
   ProductsSlugRoute: typeof ProductsSlugRoute
   ProductsCategoriesRoute: typeof ProductsCategoriesRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 const ProductsRouteChildren: ProductsRouteChildren = {
   ProductsSlugRoute: ProductsSlugRoute,
   ProductsCategoriesRoute: ProductsCategoriesRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 
 const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
@@ -393,10 +452,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAccessRoute: AdminAccessRoute,
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
+  IndustrialInsulationRoute: IndustrialInsulationRoute,
   ProductsRoute: ProductsRouteWithChildren,
   QuoteRoute: QuoteRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ValvesRoute: ValvesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
