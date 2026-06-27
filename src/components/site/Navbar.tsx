@@ -44,7 +44,7 @@ export function Navbar() {
             <img
               src={LogoImage}
               alt="AASHKOOR"
-              className="h-12 w-auto sm:h-14 md:h-16 lg:h-20"
+              className="h-10 w-auto sm:h-11 md:h-12 lg:h-14"
               width={320}
               height={80}
             />
