@@ -8,8 +8,9 @@ const NAV = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/services", label: "Services" },
+  { to: "/valves", label: "Valves" },
+  { to: "/industrial-insulation", label: "Insulation" },
   { to: "/products", label: "Products" },
-  { to: "/products/categories", label: "Categories" },
   { to: "/blog", label: "Insights" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -38,9 +39,15 @@ export function Navbar() {
           scrolled ? "glass-nav" : "bg-transparent"
         }`}
       >
-        <div className="container-prose flex h-16 items-center justify-between gap-4 md:h-20">
-          <Link to="/" className="flex items-center gap-3" aria-label="AASHKOOR home">
-            <img src={LogoImage} alt="AASHKOOR" className="h-8 w-auto md:h-9" width={160} height={40} />
+        <div className="container-prose flex h-20 items-center justify-between gap-4 md:h-28">
+          <Link to="/" className="flex items-center gap-3 py-2" aria-label="AASHKOOR home">
+            <img
+              src={LogoImage}
+              alt="AASHKOOR"
+              className="h-12 w-auto sm:h-14 md:h-16 lg:h-20"
+              width={320}
+              height={80}
+            />
           </Link>
 
           <nav className="hidden items-center gap-7 lg:flex">

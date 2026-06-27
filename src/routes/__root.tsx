@@ -151,7 +151,7 @@ function Shell() {
   return (
     <>
       <Navbar />
-      <main className="pt-16 md:pt-20">
+      <main className="pt-20 md:pt-28">
         <Outlet />
       </main>
       <Footer />

@@ -25,7 +25,7 @@ const SLIDES: Slide[] = [
     description:
       "Premium chillers, AHUs and copper-pipe systems engineered for commercial and industrial scale — installed by certified teams.",
     primary: { label: "Request a quote", to: "/quote" },
-    secondary: { label: "Explore HVAC", to: "/services/hvac" },
+    secondary: { label: "Explore valves", to: "/valves" },
   },
   {
     image: heroPlant,
@@ -45,7 +45,7 @@ const SLIDES: Slide[] = [
     description:
       "Precision irrigation, smart farming and end-to-end agricultural consulting for high-yield, sustainable operations.",
     primary: { label: "Talk to our team", to: "/contact" },
-    secondary: { label: "Explore agriculture", to: "/services/agriculture" },
+    secondary: { label: "Explore insulation", to: "/industrial-insulation" },
   },
 ];
 

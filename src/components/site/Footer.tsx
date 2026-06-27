@@ -27,9 +27,8 @@ export function Footer() {
           <FooterCol
             title="Divisions"
             links={[
-              { to: "/services/hvac", label: "HVAC Solutions" },
-              { to: "/services/agriculture", label: "Agriculture" },
-              { to: "/services/industrial-supply", label: "Industrial Supply" },
+              { to: "/valves", label: "General Valves" },
+              { to: "/industrial-insulation", label: "Industrial Insulation" },
               { to: "/products", label: "Product Catalogue" },
             ]}
           />
