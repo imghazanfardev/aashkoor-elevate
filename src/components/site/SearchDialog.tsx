@@ -2,11 +2,13 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { PRODUCTS } from "@/lib/data/products";
+import { usePublishedProducts } from "@/lib/hooks/useCms";
 
 export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [q, setQ] = useState("");
   const navigate = useNavigate();
+  const { products: PRODUCTS } = usePublishedProducts();
+
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -37,7 +39,8 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
         p.category.toLowerCase().includes(s) ||
         p.tags.some((t) => t.includes(s)),
     ).slice(0, 8);
-  }, [q]);
+  }, [q, PRODUCTS]);
+
 
   return (
     <AnimatePresence>

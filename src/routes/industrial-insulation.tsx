@@ -21,7 +21,7 @@ function InsulationPage() {
       eyebrow="Industrial Insulation"
       title="Industrial Insulation"
       description="Thermal, acoustic and fire-rated insulation systems engineered for pipes, ducts, equipment and building envelopes — including the AASHKOOR Rock and Mineral Wool ranges."
-      category="Insulation Products"
+      category="Industrial Insulation"
       related={[{ label: "General Valves", href: "/valves" }]}
     />
   );

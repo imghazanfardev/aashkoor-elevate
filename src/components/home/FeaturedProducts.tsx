@@ -2,10 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Reveal, SectionHeader } from "@/components/site/Section";
 import { ProductCard } from "@/components/site/ProductCard";
-import { PRODUCTS } from "@/lib/data/products";
+import { usePublishedProducts } from "@/lib/hooks/useCms";
 
 export function FeaturedProducts() {
-  const featured = PRODUCTS.slice(0, 6);
+  const { products } = usePublishedProducts();
+  const featured = products.slice(0, 6);
   return (
     <section className="bg-[var(--color-surface)]">
       <div className="container-prose py-24 md:py-32">
