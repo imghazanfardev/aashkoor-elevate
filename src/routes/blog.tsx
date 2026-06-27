@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Reveal, SectionHeader } from "@/components/site/Section";
+import { usePublishedPosts } from "@/lib/hooks/useCms";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -15,16 +16,9 @@ export const Route = createFileRoute("/blog")({
   component: BlogPage,
 });
 
-const POSTS = [
-  { title: "Designing HVAC for Hyperscale Data Centres", cat: "HVAC", read: "8 min" },
-  { title: "Precision Irrigation: ROI in the First Season", cat: "Agriculture", read: "6 min" },
-  { title: "Selecting Valves for Cryogenic Service", cat: "Valves", read: "10 min" },
-  { title: "Insulation Standards for Energy-Intensive Sites", cat: "Insulation", read: "7 min" },
-  { title: "Building a Maintenance Programme that Pays for Itself", cat: "HVAC", read: "5 min" },
-  { title: "Sensor Strategy for Smart Farming Operations", cat: "Agriculture", read: "9 min" },
-];
-
 function BlogPage() {
+  const { data: posts = [], isLoading } = usePublishedPosts();
+
   return (
     <div className="container-prose pb-32 pt-20 md:pt-28">
       <SectionHeader
@@ -32,17 +26,36 @@ function BlogPage() {
         title="Engineering perspectives from our practice."
         description="Field notes, case studies and analysis from the AASHKOOR engineering team."
       />
-      <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {POSTS.map((p, i) => (
-          <Reveal key={p.title} delay={(i % 6) * 0.05}>
-            <article className="group flex h-full flex-col rounded-2xl border border-foreground/10 bg-card p-7 transition-shadow hover:shadow-[var(--shadow-soft)]">
-              <span className="eyebrow text-primary/90">{p.cat}</span>
-              <h3 className="mt-4 font-display text-xl font-semibold leading-tight">{p.title}</h3>
-              <p className="mt-auto pt-8 text-xs text-muted-foreground">{p.read} read</p>
-            </article>
-          </Reveal>
-        ))}
-      </div>
+      {isLoading ? (
+        <p className="mt-14 text-center text-muted-foreground">Loading…</p>
+      ) : posts.length === 0 ? (
+        <p className="mt-14 text-center text-muted-foreground">No posts published yet — check back soon.</p>
+      ) : (
+        <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((p, i) => (
+            <Reveal key={p.id} delay={(i % 6) * 0.05}>
+              <Link to="/blog/$slug" params={{ slug: p.slug }}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-card transition-shadow hover:shadow-[var(--shadow-soft)]">
+                {p.featured_image && (
+                  <div className="aspect-[16/9] overflow-hidden bg-[var(--color-surface)]">
+                    <img src={p.featured_image} alt="" className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-7">
+                  {p.category && <span className="eyebrow text-primary/90">{p.category}</span>}
+                  <h3 className="mt-4 font-display text-xl font-semibold leading-tight">{p.title}</h3>
+                  {p.excerpt && <p className="mt-3 text-sm text-muted-foreground line-clamp-3">{p.excerpt}</p>}
+                  {p.published_at && (
+                    <p className="mt-auto pt-8 text-xs text-muted-foreground">
+                      {new Date(p.published_at).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
