@@ -31,32 +31,18 @@ export const Route = createFileRoute("/")({
 
 const DIVISIONS = [
   {
-    title: "HVAC Solutions",
-    href: "/services/hvac",
-    icon: Snowflake,
-    image: hvacImg,
-    blurb: "Heating, ventilation and climate engineering for commercial and industrial scale.",
-  },
-  {
-    title: "Agriculture",
-    href: "/services/agriculture",
-    icon: Leaf,
-    image: agriImg,
-    blurb: "Smart farming, precision irrigation and end-to-end agricultural consulting.",
-  },
-  {
-    title: "Industrial Valves",
-    href: "/services/industrial-supply",
+    title: "General Valves",
+    href: "/valves",
     icon: Cog,
     image: valvesImg,
-    blurb: "Premium general valves, fittings and components from certified manufacturers.",
+    blurb: "Industrial gate, ball, butterfly, globe and check valves from certified manufacturers — engineered for pipeline, process and utility service.",
   },
   {
-    title: "Insulation Supply",
-    href: "/services/industrial-supply",
+    title: "Industrial Insulation",
+    href: "/industrial-insulation",
     icon: Wrench,
     image: insulImg,
-    blurb: "Industrial-grade thermal and acoustic insulation engineered for performance.",
+    blurb: "Thermal, acoustic and fire-rated insulation systems for pipes, ducts, equipment and building envelopes.",
   },
 ] as const;
 
