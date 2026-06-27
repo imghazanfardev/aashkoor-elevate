@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { submitQuote } from "@/lib/forms.functions";
+import { getPublishedProductBySlug } from "@/lib/cms.functions";
 import { Reveal } from "@/components/site/Section";
-import { getProduct } from "@/lib/data/products";
+import { toProduct } from "@/lib/data/products";
 import { toast } from "sonner";
 import { ArrowLeft, ArrowRight, CheckCircle2, Package } from "lucide-react";
 
@@ -37,7 +39,13 @@ const DIVISIONS = ["Valves", "Insulation", "HVAC", "Agriculture", "Multiple / No
 
 function QuotePage() {
   const { product: productSlug } = Route.useSearch();
-  const product = productSlug ? getProduct(productSlug) : undefined;
+  const getOne = useServerFn(getPublishedProductBySlug);
+  const productQ = useQuery({
+    queryKey: ["public-product", productSlug],
+    queryFn: () => getOne({ data: { slug: productSlug } }),
+    enabled: !!productSlug,
+  });
+  const product = productQ.data ? toProduct(productQ.data) : undefined;
   const navigate = useNavigate();
   const submit = useServerFn(submitQuote);
   const [step, setStep] = useState(0);
