@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { SectionHeader } from "@/components/site/Section";
 import { ProductCard } from "@/components/site/ProductCard";
-import { PRODUCTS, CATEGORIES, type ProductCategory } from "@/lib/data/products";
+import { CATEGORIES, type ProductCategory } from "@/lib/data/products";
+import { usePublishedProducts } from "@/lib/hooks/useCms";
 
 export const Route = createFileRoute("/products/")({
   head: () => ({
@@ -29,9 +30,10 @@ function ProductsPage() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<Sort>("featured");
   const [page, setPage] = useState(1);
+  const { products } = usePublishedProducts();
 
   const items = useMemo(() => {
-    let list = PRODUCTS.filter((p) => (cat === "All" ? true : p.category === cat));
+    let list = products.filter((p) => (cat === "All" ? true : p.category === cat));
     if (q.trim()) {
       const s = q.toLowerCase();
       list = list.filter(
@@ -44,7 +46,8 @@ function ProductsPage() {
     const sorted = [...list];
     if (sort === "name") sorted.sort((a, b) => a.name.localeCompare(b.name));
     return sorted;
-  }, [cat, q, sort]);
+  }, [cat, q, sort, products]);
+
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);

@@ -2,30 +2,19 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Check, Download, FileText, Star } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Product } from "@/lib/data/products";
-import { getProduct, getRelated } from "@/lib/data/products";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toProduct } from "@/lib/data/products";
+import { getPublishedProductBySlug, listPublishedProducts } from "@/lib/cms.functions";
 import { ProductCard } from "@/components/site/ProductCard";
 
 export const Route = createFileRoute("/products/$slug")({
-  loader: ({ params }) => {
-    const product = getProduct(params.slug);
-    if (!product) throw notFound();
-    return { product };
-  },
-  head: ({ loaderData }) => {
-    const p = loaderData?.product;
-    if (!p) return { meta: [{ title: "Product not found — AASHKOOR" }] };
-    return {
-      meta: [
-        { title: `${p.name} — AASHKOOR` },
-        { name: "description", content: p.blurb },
-        { property: "og:title", content: `${p.name} — AASHKOOR` },
-        { property: "og:description", content: p.blurb },
-        { property: "og:image", content: p.image },
-      ],
-      links: [{ rel: "canonical", href: `/products/${p.slug}` }],
-    };
-  },
+  head: ({ params }) => ({
+    meta: [
+      { title: `${params.slug.replace(/-/g, " ")} — AASHKOOR` },
+    ],
+    links: [{ rel: "canonical", href: `/products/${params.slug}` }],
+  }),
   notFoundComponent: () => (
     <div className="container-prose py-32 text-center">
       <h1 className="display-section">Product not found</h1>
@@ -46,14 +35,13 @@ export const Route = createFileRoute("/products/$slug")({
   component: ProductDetail,
 });
 
-const FAQS = [
+const DEFAULT_FAQS = [
   { q: "What lead times can I expect?", a: "Stock items typically ship in 5–10 business days. Made-to-order configurations are 4–6 weeks." },
   { q: "Do you provide certificates of conformity?", a: "Yes — EN 10204 3.1/3.2 mill certificates and full traceability are included on request." },
   { q: "Can you support installation and commissioning?", a: "Our field engineering team can support site survey, installation oversight and commissioning across all regions we serve." },
-  { q: "What payment terms are available?", a: "Standard terms are 30% advance, 70% on delivery. LC and project-based terms are available for qualified accounts." },
 ];
 
-const APPLICATIONS = [
+const DEFAULT_APPLICATIONS = [
   "Oil, gas & petrochemical facilities",
   "Water treatment and desalination",
   "Industrial HVAC and district cooling",
@@ -62,24 +50,40 @@ const APPLICATIONS = [
 ];
 
 function ProductDetail() {
-  const data = Route.useLoaderData() as { product: Product } | undefined;
-  const product = data?.product;
+  const { slug } = Route.useParams();
+  const getOne = useServerFn(getPublishedProductBySlug);
+  const listAll = useServerFn(listPublishedProducts);
   const [active, setActive] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  if (!product) {
-    return (
-      <div className="container-prose py-32 text-center">
-        <h1 className="display-section">Product not found</h1>
-        <Link to="/products" className="btn-primary btn-primary-hover mt-8 inline-flex">
-          Back to catalogue
-        </Link>
-      </div>
-    );
+  const productQ = useQuery({
+    queryKey: ["public-product", slug],
+    queryFn: () => getOne({ data: { slug } }),
+  });
+  const allQ = useQuery({
+    queryKey: ["public-products"],
+    queryFn: () => listAll(),
+    staleTime: 60_000,
+  });
+
+  if (productQ.isLoading) {
+    return <div className="container-prose py-32 text-center text-muted-foreground">Loading…</div>;
+  }
+  if (!productQ.data) {
+    throw notFound();
   }
 
-  const related = getRelated(product.slug);
-  const gallery = [product.image, product.image, product.image, product.image];
+  const product = toProduct(productQ.data);
+  const all = (allQ.data ?? []).map(toProduct);
+  const related =
+    product.relatedIds.length > 0
+      ? all.filter((p) => product.relatedIds.includes(p.id)).slice(0, 3)
+      : all.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 3);
+  const gallery = product.gallery.length > 0
+    ? [product.image, ...product.gallery]
+    : [product.image, product.image, product.image, product.image];
+  const applications = product.applications.length > 0 ? product.applications : DEFAULT_APPLICATIONS;
+  const faqs = product.faqs.length > 0 ? product.faqs : DEFAULT_FAQS;
 
   return (
     <div>
@@ -112,7 +116,7 @@ function ProductDetail() {
             />
           </div>
           <div className="grid grid-cols-4 gap-3">
-            {gallery.map((src, i) => (
+            {gallery.slice(0, 4).map((src, i) => (
               <button
                 key={i}
                 onClick={() => setActive(i)}
@@ -144,8 +148,6 @@ function ProductDetail() {
               <span className="ml-2 font-medium text-foreground">{product.rating}</span>
             </div>
             <span>·</span>
-            <span>{product.reviews} reviews</span>
-            <span>·</span>
             <span>SKU {product.sku}</span>
           </div>
 
@@ -158,11 +160,7 @@ function ProductDetail() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/quote"
-              search={{ product: product.slug }}
-              className="btn-primary btn-primary-hover"
-            >
+            <Link to="/quote" search={{ product: product.slug }} className="btn-primary btn-primary-hover">
               <FileText className="h-4 w-4" /> Request Quote
             </Link>
             <Link to="/contact" className="btn-ghost">
@@ -170,31 +168,45 @@ function ProductDetail() {
             </Link>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-foreground/10 bg-card p-6">
-            <h3 className="font-display text-lg font-bold">Technical specifications</h3>
-            <dl className="mt-4 divide-y divide-foreground/10">
-              {product.specs.map((s) => (
-                <div key={s.label} className="flex justify-between gap-6 py-3 text-sm">
-                  <dt className="text-muted-foreground">{s.label}</dt>
-                  <dd className="text-right font-medium">{s.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
+          {product.specs.length > 0 && (
+            <div className="mt-10 rounded-2xl border border-foreground/10 bg-card p-6">
+              <h3 className="font-display text-lg font-bold">Technical specifications</h3>
+              <dl className="mt-4 divide-y divide-foreground/10">
+                {product.specs.map((s) => (
+                  <div key={s.label} className="flex justify-between gap-6 py-3 text-sm">
+                    <dt className="text-muted-foreground">{s.label}</dt>
+                    <dd className="text-right font-medium">{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
 
-          {product.downloads.length > 0 && (
+          {product.features.length > 0 && (
+            <div className="mt-6">
+              <h3 className="font-display text-lg font-bold">Features</h3>
+              <ul className="mt-4 space-y-2">
+                {product.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" /> {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {product.datasheetUrl && (
             <div className="mt-6">
               <h3 className="font-display text-lg font-bold">Downloads & datasheets</h3>
               <div className="mt-4 flex flex-wrap gap-3">
-                {product.downloads.map((d) => (
-                  <a
-                    key={d.label}
-                    href={d.href}
-                    className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm font-semibold hover:border-foreground/40"
-                  >
-                    <Download className="h-4 w-4" /> {d.label}
-                  </a>
-                ))}
+                <a
+                  href={product.datasheetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-4 py-2 text-sm font-semibold hover:border-foreground/40"
+                >
+                  <Download className="h-4 w-4" /> Datasheet (PDF)
+                </a>
               </div>
             </div>
           )}
@@ -207,7 +219,7 @@ function ProductDetail() {
             <p className="eyebrow text-primary">Applications</p>
             <h2 className="display-section mt-3">Built for demanding environments.</h2>
             <ul className="mt-8 space-y-3">
-              {APPLICATIONS.map((a) => (
+              {applications.map((a) => (
                 <li key={a} className="flex items-start gap-3 text-foreground/85">
                   <Check className="mt-0.5 h-5 w-5 text-primary" />
                   <span>{a}</span>
@@ -219,7 +231,7 @@ function ProductDetail() {
             <p className="eyebrow text-primary">Frequently asked</p>
             <h2 className="display-section mt-3">Specifying with confidence.</h2>
             <ul className="mt-8 divide-y divide-foreground/10 rounded-2xl border border-foreground/10 bg-card">
-              {FAQS.map((f, i) => (
+              {faqs.map((f, i) => (
                 <li key={f.q}>
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}

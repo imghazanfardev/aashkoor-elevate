@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 
 const BASE_URL = "";
 
@@ -20,6 +22,22 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/contact", changefreq: "yearly", priority: "0.6" },
           { path: "/quote", changefreq: "yearly", priority: "0.6" },
         ];
+
+        try {
+          const supabase = createClient<Database>(
+            process.env.SUPABASE_URL!,
+            process.env.SUPABASE_PUBLISHABLE_KEY!,
+            { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
+          );
+          const [{ data: products }, { data: posts }] = await Promise.all([
+            supabase.from("products").select("slug").eq("status", "published"),
+            supabase.from("blog_posts").select("slug").eq("status", "published"),
+          ]);
+          for (const p of products ?? []) entries.push({ path: `/products/${p.slug}`, changefreq: "weekly", priority: "0.7" });
+          for (const p of posts ?? []) entries.push({ path: `/blog/${p.slug}`, changefreq: "monthly", priority: "0.6" });
+        } catch (e) {
+          console.error("sitemap dynamic fetch failed", e);
+        }
 
         const urls = entries.map((e) =>
           `  <url><loc>${BASE_URL}${e.path}</loc>${e.changefreq ? `<changefreq>${e.changefreq}</changefreq>` : ""}${e.priority ? `<priority>${e.priority}</priority>` : ""}</url>`

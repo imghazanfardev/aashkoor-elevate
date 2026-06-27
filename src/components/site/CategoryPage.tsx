@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { Search, ArrowRight, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { ProductCard } from "@/components/site/ProductCard";
-import { PRODUCTS, type ProductCategory } from "@/lib/data/products";
+import { usePublishedProducts } from "@/lib/hooks/useCms";
+import type { ProductCategory } from "@/lib/data/products";
 
 const PAGE_SIZE = 9;
 
@@ -25,8 +26,9 @@ export type CategoryPageProps = {
 export function CategoryPage({ eyebrow, title, description, category, related = [] }: CategoryPageProps) {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
+  const { products } = usePublishedProducts();
 
-  const all = useMemo(() => PRODUCTS.filter((p) => p.category === category), [category]);
+  const all = useMemo(() => products.filter((p) => p.category === category), [products, category]);
 
   const items = useMemo(() => {
     if (!q.trim()) return all;
