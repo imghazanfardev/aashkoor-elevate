@@ -51,7 +51,7 @@ export function Navbar() {
           </Link>
 
           <nav className="hidden items-center gap-7 lg:flex">
-            {NAV.slice(1).map((item) => (
+            {NAV.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
