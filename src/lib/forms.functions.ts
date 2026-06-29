@@ -38,8 +38,8 @@ const contactSchema = z.object({
 export const submitQuote = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => quoteSchema.parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("quote_requests").insert({
+    const supabase = publicClient();
+    const { error } = await supabase.from("quote_requests").insert({
       name: data.name,
       company: data.company || null,
       email: data.email,
