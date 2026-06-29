@@ -1,6 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
+
+function publicClient() {
+  return createClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_PUBLISHABLE_KEY!,
+    { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
+  );
+}
 
 const quoteSchema = z.object({
   name: z.string().trim().min(1).max(120),
@@ -28,8 +38,8 @@ const contactSchema = z.object({
 export const submitQuote = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => quoteSchema.parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("quote_requests").insert({
+    const supabase = publicClient();
+    const { error } = await supabase.from("quote_requests").insert({
       name: data.name,
       company: data.company || null,
       email: data.email,
@@ -54,8 +64,8 @@ export const submitQuote = createServerFn({ method: "POST" })
 export const submitContact = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => contactSchema.parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("contact_submissions").insert({
+    const supabase = publicClient();
+    const { error } = await supabase.from("contact_submissions").insert({
       name: data.name,
       email: data.email,
       phone: data.phone || null,
