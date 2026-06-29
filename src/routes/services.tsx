@@ -22,6 +22,18 @@ export const Route = createFileRoute("/services")({
 
 const ITEMS = [
   {
+    title: "HVAC Solutions",
+    href: "/services/hvac" as const,
+    img: hvacImg,
+    desc: "Commercial and industrial heating, cooling and ventilation — designed, installed and serviced.",
+  },
+  {
+    title: "Agriculture",
+    href: "/services/agriculture" as const,
+    img: agriImg,
+    desc: "Smart farming, precision irrigation, crop solutions and agricultural consulting.",
+  },
+  {
     title: "General Valves",
     href: "/valves" as const,
     img: valvesImg,
@@ -33,7 +45,7 @@ const ITEMS = [
     img: insulImg,
     desc: "Thermal, acoustic and fire-rated insulation systems engineered for pipes, ducts, equipment and building envelopes — including the AASHKOOR Rock and Mineral Wool ranges.",
   },
-];
+] as const;
 
 function ServicesPage() {
   return (
