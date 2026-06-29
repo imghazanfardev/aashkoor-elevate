@@ -64,8 +64,8 @@ export const submitQuote = createServerFn({ method: "POST" })
 export const submitContact = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => contactSchema.parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("contact_submissions").insert({
+    const supabase = publicClient();
+    const { error } = await supabase.from("contact_submissions").insert({
       name: data.name,
       email: data.email,
       phone: data.phone || null,
