@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal, SectionHeader } from "@/components/site/Section";
+import hvacImg from "@/assets/division-hvac.jpg";
+import agriImg from "@/assets/division-agriculture.jpg";
 import valvesImg from "@/assets/division-valves.jpg";
 import insulImg from "@/assets/division-insulation.jpg";
 
