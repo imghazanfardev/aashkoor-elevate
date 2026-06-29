@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ValvesRouteImport } from './routes/valves'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as QuoteRouteImport } from './routes/quote'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as IndustrialInsulationRouteImport } from './routes/industrial-insulation'
@@ -41,6 +42,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuoteRoute = QuoteRouteImport.update({
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/industrial-insulation': typeof IndustrialInsulationRoute
   '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/valves': typeof ValvesRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/industrial-insulation': typeof IndustrialInsulationRoute
   '/quote': typeof QuoteRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/valves': typeof ValvesRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/industrial-insulation': typeof IndustrialInsulationRoute
   '/products': typeof ProductsRouteWithChildren
   '/quote': typeof QuoteRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/valves': typeof ValvesRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/industrial-insulation'
     | '/products'
     | '/quote'
+    | '/reset-password'
     | '/services'
     | '/sitemap.xml'
     | '/valves'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industrial-insulation'
     | '/quote'
+    | '/reset-password'
     | '/services'
     | '/sitemap.xml'
     | '/valves'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/industrial-insulation'
     | '/products'
     | '/quote'
+    | '/reset-password'
     | '/services'
     | '/sitemap.xml'
     | '/valves'
@@ -246,6 +258,7 @@ export interface RootRouteChildren {
   IndustrialInsulationRoute: typeof IndustrialInsulationRoute
   ProductsRoute: typeof ProductsRouteWithChildren
   QuoteRoute: typeof QuoteRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ValvesRoute: typeof ValvesRoute
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quote': {
@@ -441,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndustrialInsulationRoute: IndustrialInsulationRoute,
   ProductsRoute: ProductsRouteWithChildren,
   QuoteRoute: QuoteRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ValvesRoute: ValvesRoute,
