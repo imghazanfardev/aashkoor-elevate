@@ -10,9 +10,9 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services — AASHKOOR" },
-      { name: "description", content: "Two engineered divisions: General Valves and Industrial Insulation." },
+      { name: "description", content: "Explore AASHKOOR's four engineering and supply divisions." },
       { property: "og:title", content: "AASHKOOR Services" },
-      { property: "og:description", content: "Industrial valves and insulation systems for demanding service." },
+      { property: "og:description", content: "HVAC, agriculture, industrial valves and insulation." },
       { property: "og:url", content: "/services" },
     ],
     links: [{ rel: "canonical", href: "/services" }],
