@@ -53,8 +53,8 @@ function ServicesPage() {
       <section className="container-prose pb-12 pt-20 md:pt-28">
         <SectionHeader
           eyebrow="What we do"
-          title={<>Two divisions, one engineering standard.</>}
-          description="AASHKOOR is focused on two engineered practices — industrial valves and industrial insulation. Both are led by senior specialists and backed by full technical documentation."
+          title={<>Four divisions, one engineering standard.</>}
+          description="Each division is led by senior specialists with decades of operating experience. Together they cover the full lifecycle of industrial facility systems."
         />
       </section>
 
