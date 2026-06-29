@@ -17,7 +17,7 @@ export const Route = createFileRoute("/admin-access")({
 
 function AdminAccessPage() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -42,6 +42,13 @@ function AdminAccessPage() {
           return;
         }
         navigate({ to: "/admin" });
+      } else if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Password reset link sent. Check your email.");
+        setMode("signin");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -91,12 +98,18 @@ function AdminAccessPage() {
         </div>
 
         <h2 className="display-section mt-6">
-          {mode === "signin" ? "Sign in to dashboard." : "Create admin account."}
+          {mode === "signin"
+            ? "Sign in to dashboard."
+            : mode === "signup"
+            ? "Create admin account."
+            : "Reset your password."}
         </h2>
         <p className="mt-3 text-muted-foreground">
           {mode === "signin"
             ? "Enter your administrator credentials."
-            : "Use admin@aashkoor.com for auto-granted admin privileges."}
+            : mode === "signup"
+            ? "Use admin@aashkoor.com for auto-granted admin privileges."
+            : "Enter your admin email — we'll send you a reset link."}
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
@@ -111,23 +124,50 @@ function AdminAccessPage() {
               autoComplete="email"
             />
           </Field>
-          <Field icon={<Lock className="h-4 w-4" />} label="Password">
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="field-input"
-              placeholder="••••••••"
-              autoComplete={mode === "signin" ? "current-password" : "new-password"}
-            />
-          </Field>
+          {mode !== "forgot" && (
+            <Field icon={<Lock className="h-4 w-4" />} label="Password">
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="field-input"
+                placeholder="••••••••"
+                autoComplete={mode === "signin" ? "current-password" : "new-password"}
+              />
+            </Field>
+          )}
 
           <button type="submit" disabled={busy} className="btn-primary btn-primary-hover w-full disabled:opacity-50">
-            {busy ? "Working…" : mode === "signin" ? "Sign in" : "Create account"}
+            {busy
+              ? "Working…"
+              : mode === "signin"
+              ? "Sign in"
+              : mode === "signup"
+              ? "Create account"
+              : "Send reset link"}
             <ArrowRight className="h-4 w-4" />
           </button>
+
+          {mode === "signin" && (
+            <button
+              type="button"
+              onClick={() => setMode("forgot")}
+              className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-4"
+            >
+              Forgot password?
+            </button>
+          )}
+          {mode === "forgot" && (
+            <button
+              type="button"
+              onClick={() => setMode("signin")}
+              className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-4"
+            >
+              Back to sign in
+            </button>
+          )}
         </form>
       </motion.div>
 
