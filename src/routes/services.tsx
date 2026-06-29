@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal, SectionHeader } from "@/components/site/Section";
+import hvacImg from "@/assets/division-hvac.jpg";
+import agriImg from "@/assets/division-agriculture.jpg";
 import valvesImg from "@/assets/division-valves.jpg";
 import insulImg from "@/assets/division-insulation.jpg";
 
@@ -8,9 +10,9 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services — AASHKOOR" },
-      { name: "description", content: "Two engineered divisions: General Valves and Industrial Insulation." },
+      { name: "description", content: "Explore AASHKOOR's four engineering and supply divisions." },
       { property: "og:title", content: "AASHKOOR Services" },
-      { property: "og:description", content: "Industrial valves and insulation systems for demanding service." },
+      { property: "og:description", content: "HVAC, agriculture, industrial valves and insulation." },
       { property: "og:url", content: "/services" },
     ],
     links: [{ rel: "canonical", href: "/services" }],
@@ -19,6 +21,18 @@ export const Route = createFileRoute("/services")({
 });
 
 const ITEMS = [
+  {
+    title: "HVAC Solutions",
+    href: "/services/hvac" as const,
+    img: hvacImg,
+    desc: "Commercial and industrial heating, cooling and ventilation — designed, installed and serviced.",
+  },
+  {
+    title: "Agriculture",
+    href: "/services/agriculture" as const,
+    img: agriImg,
+    desc: "Smart farming, precision irrigation, crop solutions and agricultural consulting.",
+  },
   {
     title: "General Valves",
     href: "/valves" as const,
@@ -31,7 +45,7 @@ const ITEMS = [
     img: insulImg,
     desc: "Thermal, acoustic and fire-rated insulation systems engineered for pipes, ducts, equipment and building envelopes — including the AASHKOOR Rock and Mineral Wool ranges.",
   },
-];
+] as const;
 
 function ServicesPage() {
   return (
@@ -39,8 +53,8 @@ function ServicesPage() {
       <section className="container-prose pb-12 pt-20 md:pt-28">
         <SectionHeader
           eyebrow="What we do"
-          title={<>Two divisions, one engineering standard.</>}
-          description="AASHKOOR is focused on two engineered practices — industrial valves and industrial insulation. Both are led by senior specialists and backed by full technical documentation."
+          title={<>Four divisions, one engineering standard.</>}
+          description="Each division is led by senior specialists with decades of operating experience. Together they cover the full lifecycle of industrial facility systems."
         />
       </section>
 
