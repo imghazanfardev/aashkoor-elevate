@@ -59,6 +59,14 @@ function HomePage() {
       {/* HERO SLIDER */}
       <HeroSlider />
 
+      {/* OFFICIAL DISTRIBUTOR — VANTEC */}
+      <OfficialDistributor />
+
+      {/* VANTEC VALVE CAROUSEL */}
+      <ValvesCarousel />
+
+
+
 
       {/* INTRO */}
       <section className="container-prose grid gap-10 py-24 md:grid-cols-[1fr_1.4fr] md:py-32">
