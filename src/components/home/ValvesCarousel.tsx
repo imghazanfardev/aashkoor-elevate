@@ -96,22 +96,27 @@ export function ValvesCarousel() {
         .valves-swiper-wrapper .swiper-button-next,
         .valves-swiper-wrapper .swiper-button-prev {
           color: var(--primary);
-          background: var(--background);
-          width: 32px;
-          height: 32px;
-          border-radius: 9999px;
-          box-shadow: 0 4px 12px -4px color-mix(in oklab, var(--foreground) 25%, transparent);
-          border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+          width: 24px;
+          height: 24px;
           top: 50%;
           transform: translateY(-50%);
           margin-top: 0;
+          background: none;
+          border-radius: 0;
+          box-shadow: none;
+          border: none;
         }
         .valves-swiper-wrapper .swiper-button-next { right: 0; }
         .valves-swiper-wrapper .swiper-button-prev { left: 0; }
-        .valves-swiper-wrapper .swiper-button-next::after,
+        .valves-swiper-wrapper .swiper-button-next::after {
+          content: '→';
+          font-size: 20px;
+          font-weight: 400;
+        }
         .valves-swiper-wrapper .swiper-button-prev::after {
-          font-size: 11px;
-          font-weight: 800;
+          content: '←';
+          font-size: 20px;
+          font-weight: 400;
         }
         .valves-swiper-wrapper .swiper-button-disabled {
           opacity: 0.35;
