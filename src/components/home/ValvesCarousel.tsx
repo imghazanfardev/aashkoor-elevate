@@ -108,14 +108,18 @@ export function ValvesCarousel() {
         }
         .valves-swiper-wrapper .swiper-button-next { right: 0; }
         .valves-swiper-wrapper .swiper-button-prev { left: 0; }
+        .valves-swiper-wrapper .swiper-button-next svg,
+        .valves-swiper-wrapper .swiper-button-prev svg {
+          display: none;
+        }
         .valves-swiper-wrapper .swiper-button-next::after {
           content: '→';
-          font-size: 20px;
+          font-size: 28px;
           font-weight: 400;
         }
         .valves-swiper-wrapper .swiper-button-prev::after {
           content: '←';
-          font-size: 20px;
+          font-size: 28px;
           font-weight: 400;
         }
         .valves-swiper-wrapper .swiper-button-disabled {
