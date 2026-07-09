@@ -12,7 +12,6 @@ export function ValvesCarousel() {
   const { products } = usePublishedProducts();
   const valves = products.filter((p) => p.category === "Valves");
 
-  if (valves.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden bg-background">
