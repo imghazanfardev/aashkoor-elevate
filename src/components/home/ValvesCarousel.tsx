@@ -97,10 +97,10 @@ export function ValvesCarousel() {
         .valves-swiper-wrapper .swiper-button-prev {
           color: var(--primary);
           background: var(--background);
-          width: 44px;
-          height: 44px;
+          width: 32px;
+          height: 32px;
           border-radius: 9999px;
-          box-shadow: 0 8px 24px -8px color-mix(in oklab, var(--foreground) 25%, transparent);
+          box-shadow: 0 4px 12px -4px color-mix(in oklab, var(--foreground) 25%, transparent);
           border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
           top: 50%;
           transform: translateY(-50%);
@@ -110,7 +110,7 @@ export function ValvesCarousel() {
         .valves-swiper-wrapper .swiper-button-prev { left: 0; }
         .valves-swiper-wrapper .swiper-button-next::after,
         .valves-swiper-wrapper .swiper-button-prev::after {
-          font-size: 15px;
+          font-size: 11px;
           font-weight: 800;
         }
         .valves-swiper-wrapper .swiper-button-disabled {
