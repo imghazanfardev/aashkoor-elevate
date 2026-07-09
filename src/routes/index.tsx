@@ -8,6 +8,8 @@ import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { IndustriesServed } from "@/components/home/IndustriesServed";
 import { EngineeringExcellence } from "@/components/home/EngineeringExcellence";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
+import { OfficialDistributor } from "@/components/home/OfficialDistributor";
+import { ValvesCarousel } from "@/components/home/ValvesCarousel";
 
 export const Route = createFileRoute("/")({
   head: () => ({
