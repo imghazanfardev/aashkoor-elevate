@@ -40,12 +40,12 @@ export function ValvesCarousel() {
               1024: { slidesPerView: 3, spaceBetween: 24 },
               1280: { slidesPerView: 4, spaceBetween: 24 },
             }}
-            className="!pb-14"
+            className="!px-14 !pb-14"
           >
             {valves.map((p) => (
-              <SwiperSlide key={p.slug} className="h-auto">
-                <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-card shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elev)]">
-                  <div className="relative aspect-square overflow-hidden bg-white">
+              <SwiperSlide key={p.slug} className="!h-auto !flex">
+                <article className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-foreground/8 bg-card shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-elev)]">
+                  <div className="relative aspect-square shrink-0 overflow-hidden bg-white">
                     <img
                       src={p.image}
                       alt={p.name}
@@ -60,11 +60,11 @@ export function ValvesCarousel() {
                     <Link
                       to="/products/$slug"
                       params={{ slug: p.slug }}
-                      className="font-display text-base font-semibold leading-snug tracking-tight hover:text-primary line-clamp-2"
+                      className="font-display text-base font-semibold leading-snug tracking-tight hover:text-primary line-clamp-2 min-h-[2.75rem]"
                     >
                       {p.name}
                     </Link>
-                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{p.blurb}</p>
+                    <p className="mt-1 text-xs text-muted-foreground line-clamp-2 min-h-[2rem]">{p.blurb}</p>
                     <div className="mt-auto grid grid-cols-2 gap-2 pt-5">
                       <Link
                         to="/products/$slug"
@@ -90,26 +90,38 @@ export function ValvesCarousel() {
       </div>
 
       <style>{`
+        .valves-swiper-wrapper .swiper-wrapper {
+          align-items: stretch;
+        }
         .valves-swiper-wrapper .swiper-button-next,
         .valves-swiper-wrapper .swiper-button-prev {
-          color: hsl(var(--primary));
-          background: hsl(var(--background));
+          color: var(--primary);
+          background: var(--background);
           width: 44px;
           height: 44px;
           border-radius: 9999px;
-          box-shadow: var(--shadow-soft);
+          box-shadow: 0 8px 24px -8px color-mix(in oklab, var(--foreground) 25%, transparent);
+          border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+          top: 50%;
+          transform: translateY(-50%);
+          margin-top: 0;
         }
+        .valves-swiper-wrapper .swiper-button-next { right: 0; }
+        .valves-swiper-wrapper .swiper-button-prev { left: 0; }
         .valves-swiper-wrapper .swiper-button-next::after,
         .valves-swiper-wrapper .swiper-button-prev::after {
-          font-size: 16px;
-          font-weight: 700;
+          font-size: 15px;
+          font-weight: 800;
+        }
+        .valves-swiper-wrapper .swiper-button-disabled {
+          opacity: 0.35;
         }
         .valves-swiper-wrapper .swiper-pagination-bullet {
-          background: hsl(var(--foreground));
+          background: var(--foreground);
           opacity: 0.25;
         }
         .valves-swiper-wrapper .swiper-pagination-bullet-active {
-          background: hsl(var(--primary));
+          background: var(--primary);
           opacity: 1;
         }
       `}</style>
